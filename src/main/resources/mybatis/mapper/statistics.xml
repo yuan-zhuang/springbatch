@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace指向实体类 -->
+<mapper namespace="com.jrx.repository.StatisticsMapper">
+    <select id="queryAllStatistics" resultType="Statistics">
+        select cust_id,
+               update_time,
+               trans_date,
+               surname,
+               tran_max_amt,
+               pay_amt,
+               tran_cnt,
+               pay_cnt,
+               tran_amt
+               from statistics
+    </select>
+
+    <select id="queryByCustomerId" parameterType="int" resultType="Statistics">
+        select cust_id,
+               update_time,
+               trans_date,
+               surname,
+               tran_max_amt,
+               pay_amt,
+               tran_cnt,
+               pay_cnt,
+               tran_amt
+               from statistics
+               where cust_id=#{cust_id}
+    </select>
+
+    <select id="queryByIdAndDate" parameterType="map" resultType="Statistics">
+        select cust_id,
+               update_time,
+               trans_date,
+               surname,
+               tran_max_amt,
+               pay_amt,
+               tran_cnt,
+               pay_cnt,
+               tran_amt
+               from statistics
+               where cust_id=#{cust_id} and update_time=#{update_time}
+    </select>
+
+    <select id="queryBySurname" parameterType="map" resultType="Statistics">
+        select cust_id,
+               update_time,
+               trans_date,
+               surname,
+               tran_max_amt,
+               pay_amt,
+               tran_cnt,
+               pay_cnt,
+               tran_amt
+               from statistics
+               where cust_is=#{surname}
+    </select>
+
+    <insert id="insertStatistics" parameterType="map">
+        insert into statictics values (
+                                       #{s_index},
+                                       #{cust_id},
+                                       #{update_time},
+                                       #{trans_date},
+                                       #{surname},
+                                       #{tran_max_amt},
+                                       #{pay_amt},
+                                       #{tran_cnt},
+                                       #{pay_cnt},
+                                       #{tran_amt}
+        )
+    </insert>
+    
+    <select id="countTransCnt" resultType="java.util.Map">
+         select trans_date as date,tran_amt as money from statistics
+                 where trans_date  between '2020-01-01' and '2020-01-31' and cust_id=#{id};
+    </select>
+
+    <select id="selectPayAndTran" resultType="java.util.Map">
+         select sum(pay_amt) as pay,sum(tran_amt) as tran from statistics
+                where trans_date  between '2020-01-01' and '2020-01-31' and cust_id=#{id};
+
+    </select>
+
+    <update id="updateCustomer" parameterType="map">
+        update customer set
+                           update_time=#{update_time},
+                           trans_date=#{trans_date},
+                           tran_max_amt=#{tran_max_amt},
+                           pay_amt=#{pay_amt},
+                           tran_cnt=#{tran_cnt},
+                           pay_cnt=#{pay_cnt},
+                           tran_amt=#{tran_amt}
+                           from statistics
+    </update>
+
+    <delete id="deleteStatisticsByCustomerId" parameterType="int">
+        delete from statistics where cust_id=#{cust_id}
+    </delete>
+
+</mapper>

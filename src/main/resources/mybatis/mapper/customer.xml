@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace指向实体类 -->
+<mapper namespace="com.jrx.repository.CustomerMapper">
+    <select id="queryAllCustomer" resultType="Customer">
+        select * from customer
+    </select>
+
+    <select id="queryCustomerById" parameterType="int" resultType="Customer">
+        select * from customer where cust_id=#{id}
+    </select>
+
+    <insert id="insertCustomer" parameterType="map">
+        insert into customer(surname,gender,educa_des,mar_des,birthday,address) values (
+               #{surname},
+               #{gender},
+               #{educa_des},
+               #{mar_des},
+               to_date(#{birthday},'yyyy-MM-dd'),
+               #{address}
+        )
+    </insert>
+
+    <update id="updateCustomer" parameterType="map">
+        update customer set
+                           surname=#{surname},
+                           gender=#{gender},
+                           educa_des=#{educa_des},
+                           mar_des=#{mar_des},
+                           birthday=to_date(#{birthday},'yyyy-MM-dd'),
+                           address=#{address}
+                           where cust_id=#{cust_id}
+    </update>
+
+    <delete id="deleteCustomerById" parameterType="int">
+        delete from customer where cust_id=#{cust_id}
+    </delete>
+
+</mapper>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace指向实体类 -->
+<mapper namespace="com.jrx.repository.TransactionDetailMapper">
+    <select id="queryAllTransaction" resultType="TransactionDetail">
+        select trans_id,
+               cust_id,
+               account,
+               card_nbr,
+               tranno,
+               month_nbr,
+               bill,
+               trans_type,
+               date_format(txn_datetime,'%Y-%m-%d %H:%i:%s')
+             from transaction
+    </select>
+
+    <select id="queryTransactionById" parameterType="int" resultType="TransactionDetail">
+        select trans_id,
+               cust_id,
+               account,
+               card_nbr,
+               tranno,
+               month_nbr,
+               bill,
+               trans_type,
+               date_format(txn_datetime,'%Y-%m-%d %H:%i:%s')
+             from transaction where trans_id=#{id}
+    </select>
+
+    <select id="countMonth" resultType="java.util.Map" parameterType="int">
+        select month_nbr as month ,count(month_nbr) as count from transaction
+                                  where cust_id=#{id} group by month_nbr
+    </select>
+
+    <insert id="insertTransaction" parameterType="map">
+        insert into transaction(cust_id,account,card_nbr,tranno,month_nbr,bill,trans_type,txn_detetime) values(
+                                        #{cust_id},
+                                        #{account},
+                                        #{card_nbr},
+                                        #{tranno},
+                                        #{month_nbr},
+                                        #{bill},
+                                        #{trans_type},
+                                        to_date(#{txn_datetime},'YYYY-MM-DD HH:MM:SS')
+        )
+    </insert>
+
+    <update id="updateTransaction" parameterType="map">
+        update transaction set
+                             cust_id=#{cust_id},
+                             account=#{account},
+                             card_nbr=#{card_nbr},
+                             tranno=#{tranno},
+                             month_nbr=#{month_nbr},
+                             bill=#{bill},
+                             trans_type=#{trans_type},
+                             to_date(#{txn_detetime},'YYYY-MM-DD HH:MM:SS')
+                             where trans_id=#{id}
+    </update>
+
+    <delete id="deleteTransaction" parameterType="int">
+        delete from transaction where trans_id=#{id}
+    </delete>
+
+    <delete id="deleteTransactionByCustomerId" parameterType="int">
+        delete from transaction as t,customer as c where trans_id=#{id} and t.cust_id=c.cust_id
+    </delete>
+
+</mapper>

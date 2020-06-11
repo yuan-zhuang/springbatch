@@ -1,0 +1,46 @@
+#配置端口号
+server:
+  port: 8080
+
+#配置数据源
+spring:
+  datasource:
+    username: root
+    password: mysql
+    url: jdbc:mysql://127.0.0.1:3306/jrx
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    #在启动项目时建表sql脚本，该脚本由SpringBatch提供
+    #schema: classpath:/org/springframework/batch/core/schema-mysql.sql
+    #是否生成执行状态记录的表结构
+  #batch:
+   # initialize-schema: always
+    #禁止Spring Batch自动执行，需要用户触发才可以执行
+    #job:
+     # enabled: false
+
+  #静态资源配置
+  mvc:
+    static-path-pattern: /static/**
+  #thymeleaf模版引擎配置
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    mode: HTML
+    encoding: utf-8
+    cache: false
+    servlet:
+      content-type: text/html
+
+#mybatis整合
+mybatis:
+  type-aliases-package: com.jrx.pojo
+  mapper-locations: classpath:mybatis/mapper/*.xml
+
+#日志配置
+logging:
+  level:
+    org:
+      springframework:
+         boot:
+          autoconfigure: error
+
